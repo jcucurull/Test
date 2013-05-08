@@ -100,20 +100,20 @@ followed:
 
 1. Extract public key of VCS from the certificate
 
-    $ openssl x509 -pubkey -noout -in certificateVCS.crt > pubkeyVCS.pem
+		$ openssl x509 -pubkey -noout -in certificateVCS.crt > pubkeyVCS.pem
 
 
 2. Perform the SHA256 of the receipts list. The hash must be created
 in hexadecimal representation inside a string with no spaces or
 new-line characters.
 
-    $ sha256sum bulletin_election_id.txt | grep -o '^[^ ]*' | tr -d '\n' > sha.txt
+		$ sha256sum bulletin_election_id.txt | grep -o '^[^ ]*' | tr -d '\n' > sha.txt
 
 
 3. Validate the signature of the list with the SHA256 obtained using
 the VCS public key
 
-    $ openssl dgst -sha256 -verify pubkeyVCS.pem -signature bulletin_election_id.sig sha.txt
+		$ openssl dgst -sha256 -verify pubkeyVCS.pem -signature bulletin_election_id.sig sha.txt
 
 
 
