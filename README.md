@@ -122,7 +122,7 @@ steps must be followed:
 
 1.Extract the public key of the RCG certificate:
 
-	$ openssl x509 -pubkey -noout -in certificateRCG.crt > pubkeyRCG.pem
+		$ openssl x509 -pubkey -noout -in certificateRCG.crt > pubkeyRCG.pem
 
 
 2.Get next entry ($entry) of the list (with copy and paste, text
@@ -131,17 +131,17 @@ processor command-line tool or similar)
 
 3.Extract receipt of the entry:
 
-	$ echo $entry | awk -F',' '{print $1}' | grep -o '^[^ ]*' | tr -d '\n'  > receipt.txt
+		$ echo $entry | awk -F',' '{print $1}' | grep -o '^[^ ]*' | tr -d '\n'  > receipt.txt
 
 
 4.Extract the signature of the receipt (converting it from Base64 to binary):
 
-	$ echo $entry | awk -F',' '{print $2}' | base64 -d > receipt.sig
+		$ echo $entry | awk -F',' '{print $2}' | base64 -d > receipt.sig
 
 
 5.Validate the signature of the receipt:
 
-	$ openssl dgst -sha256 -verify pubkeyRCG.pem -signature receipt.sig receipt.txt
+		$ openssl dgst -sha256 -verify pubkeyRCG.pem -signature receipt.sig receipt.txt
 
 
 6.Goto step 2 to validate the next entry.
