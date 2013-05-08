@@ -2,9 +2,9 @@ Bulletin Board
 ==============
 
 The Bulletin Board is a public repository that contains a list with
-the receipts of the votes cast during an election. The vote receipt
-list is periodically updated, hence it represents the contents of the
-ballot box at the time it is published. 
+the receipts of the votes cast during an election. This list represents
+the contents of the ballot box at the time it is published. The list is 
+periodically regenerated and published.
 
 The purpose of the Bulletin Board is to provide the voter with a 
 mechanism to check tha the vote she cast is inside the ballot box of 
@@ -23,11 +23,11 @@ Data provided
 The Bulletin Board repository contains two files that are periodically
 updated and a README file. 
 
- \
- |
- |--\bulletin_election_id.txt
- |--\bulletin_election_id.sig
- |--\README.md
+	\
+ 	|
+	|--\bulletin_election_id.txt
+	|--\bulletin_election_id.sig
+	|--\README.md
 
 
 The "bulletin_election_id.txt" contains the list of receipts, the 
@@ -45,7 +45,7 @@ that represents the number of milliseconds between the current time
 and midnight January 1, 1970 UTC). The rest of the entries contain the
 vote receipts organised in the following fields:
 
-> _Vote Receipt_, _Signature of the Receipt_
+	_Vote Receipt_, _Signature of the Receipt_
 
 The voter can check that her vote is present in the ballot box by
 using this list. She only has to search the _vote receipt_ obtained after
@@ -100,20 +100,20 @@ followed:
 
 1. Extract public key of VCS from the certificate
 
-> $ openssl x509 -pubkey -noout -in certificateVCS.crt > pubkeyVCS.pem
+	$ openssl x509 -pubkey -noout -in certificateVCS.crt > pubkeyVCS.pem
 
 
 2. Perform the SHA256 of the receipts list. The hash must be created
 in hexadecimal representation inside a string with no spaces or
 new-line characters.
 
-> $ sha256sum bulletin_election_id.txt | grep -o '^[^ ]*' | tr -d '\n' > sha.txt
+	$ sha256sum bulletin_election_id.txt | grep -o '^[^ ]*' | tr -d '\n' > sha.txt
 
 
 3. Validate the signature of the list with the SHA256 obtained using
 the VCS public key
 
-> $ openssl dgst -sha256 -verify pubkeyVCS.pem -signature bulletin_election_id.sig sha.txt
+	$ openssl dgst -sha256 -verify pubkeyVCS.pem -signature bulletin_election_id.sig sha.txt
 
 
 In order to validate the authenticity of the individual receipts these
@@ -121,7 +121,7 @@ steps must be followed:
 
 1.Extract the public key of the RCG certificate:
 
-> $ openssl x509 -pubkey -noout -in certificateRCG.crt > pubkeyRCG.pem
+	$ openssl x509 -pubkey -noout -in certificateRCG.crt > pubkeyRCG.pem
 
 
 2.Get next entry ($entry) of the list (with copy and paste, text
@@ -130,17 +130,17 @@ processor command-line tool or similar)
 
 3.Extract receipt of the entry:
 
-> $ echo $entry | awk -F',' '{print $1}' | grep -o '^[^ ]*' | tr -d '\n'  > receipt.txt
+	$ echo $entry | awk -F',' '{print $1}' | grep -o '^[^ ]*' | tr -d '\n'  > receipt.txt
 
 
 4.Extract the signature of the receipt (converting it from Base64 to binary):
 
-> $ echo $entry | awk -F',' '{print $2}' | base64 -d > receipt.sig
+	$ echo $entry | awk -F',' '{print $2}' | base64 -d > receipt.sig
 
 
 5.Validate the signature of the receipt:
 
-> $ openssl dgst -sha256 -verify pubkeyRCG.pem -signature receipt.sig receipt.txt
+	$ openssl dgst -sha256 -verify pubkeyRCG.pem -signature receipt.sig receipt.txt
 
 
 6.Goto step 2 to validate the next entry.
